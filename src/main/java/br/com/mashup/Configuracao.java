@@ -10,6 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 import br.com.mashup.properties.LoadProperties;
+import br.com.mashup.twitter.oauth.TwitterOauth;
+import br.com.mashup.twitter.oauth.TwitterOauthKeys;
 
 @SpringBootApplication
 @ComponentScan("br.com.mashup")
@@ -17,6 +19,9 @@ public class Configuracao implements ApplicationRunner{
 
 	@Autowired
 	LoadProperties loadProperties;
+	
+	@Autowired
+	TwitterOauth twitterOauth;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(Configuracao.class, args);
@@ -26,8 +31,9 @@ public class Configuracao implements ApplicationRunner{
     public void run(ApplicationArguments args) throws Exception {
         
 		System.out.println("Application started with command-line arguments: {}" + Arrays.toString(args.getSourceArgs()));
-    	String result = loadProperties.load(args.getOptionValues("properties.path").get(0));
-    	System.out.println("loadProperties: " + result);
+		TwitterOauthKeys twitterOauthKeys = loadProperties.load(args.getOptionValues("properties.path").get(0));
+    	
+    	twitterOauth.connect(twitterOauthKeys);
   
 	}
 
