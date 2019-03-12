@@ -1,4 +1,4 @@
-package br.com.mashupbr.properties;
+package br.com.mashup.properties;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -7,10 +7,12 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
-import br.com.mashupbr.properties.LoadProperties;
+import br.com.mashup.properties.LoadProperties;
 
 @SpringBootApplication
+@ComponentScan("br.com.mashup")
 public class Configuracao implements ApplicationRunner{
 
 	@Autowired
