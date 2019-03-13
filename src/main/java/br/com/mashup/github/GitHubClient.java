@@ -11,13 +11,13 @@ import br.com.mashup.github.model.GitHubResponse;
 @Component
 public class GitHubClient {
 
-	public List<GitHubRepository> getGitHubRepositories(String filter){
+	public List<GitHubRepository> getGitHubRepositories(){
 		
 		RestTemplate restTemplate = new RestTemplate();
 		String url = "https://api.github.com/search/repositories?q=Internet+of+things";
 		
 		GitHubResponse response = restTemplate.getForObject(url, GitHubResponse.class);
-		List<GitHubRepository> repositories = response.getItems();
+		List<GitHubRepository> repositories = response.getItems().subList(0, 10);
 		
 		return repositories;
 	

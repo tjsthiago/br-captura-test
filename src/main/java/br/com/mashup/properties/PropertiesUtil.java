@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import br.com.mashup.twitter.oauth.TwitterOauthKeys;
 
 @Component
-public class LoadProperties {
+public class PropertiesUtil {
 
 	public TwitterOauthKeys load(String path) {
 		
@@ -35,6 +35,11 @@ public class LoadProperties {
         
         return twitterOauthKeys;
 		
+	}
+	
+	public TwitterOauthKeys getTwitterOauthKeys(String propertiesPath) {
+		TwitterOauthKeys twitterOauthKeys = this.load(propertiesPath);
+		return twitterOauthKeys;
 	}
 	
 }

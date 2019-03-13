@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 import br.com.mashup.github.GitHubClient;
 import br.com.mashup.github.model.GitHubRepository;
-import br.com.mashup.properties.LoadProperties;
+import br.com.mashup.properties.PropertiesUtil;
 import br.com.mashup.twitter.oauth.TwitterClient;
 import br.com.mashup.twitter.oauth.TwitterOauth;
 import br.com.mashup.twitter.oauth.TwitterOauthKeys;
@@ -24,11 +24,11 @@ import twitter4j.Twitter;
 public class Application implements ApplicationRunner {
 
 	@Autowired
-	LoadProperties loadProperties;
+	PropertiesUtil propertiesUtil;
 
 	@Autowired
 	TwitterOauth twitterOauth;
-	
+
 	@Autowired
 	TwitterClient twitterClient;
 
@@ -43,25 +43,44 @@ public class Application implements ApplicationRunner {
 	public void run(ApplicationArguments args) throws Exception {
 
 		System.out.println("##### Application started with command-line arguments: {}" + Arrays.toString(args.getSourceArgs()));
-		TwitterOauthKeys twitterOauthKeys = loadProperties.load(args.getOptionValues("properties.path").get(0));
+		TwitterOauthKeys twitterOauthKeys = propertiesUtil.getTwitterOauthKeys(args.getOptionValues("properties.path").get(0));
 
+		System.out.println("");
 		System.out.println("##### Connecting to Twitter API");
-		Twitter twitter = twitterOauth.connect(twitterOauthKeys);
-		
-		System.out.println("##### Getting tweets");
-		List<Status> tweets = twitterClient.getTweets(twitter);
+		Twitter twitterConnect = twitterOauth.connect(twitterOauthKeys);
 
-		for (Status status : tweets) {
-			System.out.println("\t Usuário: " + status.getUser().getName() + ":" + "Tweet:" + status.getText());
-		}
-		
+		System.out.println("");
 		System.out.println("##### Getting GitHub reposotories");
-		List<GitHubRepository> repositories = gitHubClient.getGitHubRepositories("");
+		List<GitHubRepository> repositories = gitHubClient.getGitHubRepositories();
 		
 		for (GitHubRepository repository : repositories) {
-			System.out.println("\t repository: " + repository.getFull_name());
+
+			System.out.println("");
+			System.out.println("##### repository: " + repository.getFull_name());
+			System.out.println("##### Getting tweets relationship with " + repository.getFull_name() + " repository filtering by " + repository.getName());
+
+			List<Status> tweets = twitterClient.searchTweets(twitterConnect, repository.getName());
+			
+			if(tweets.size() > 0) {
+				printTweets(tweets);
+			}else {
+				System.out.println("##### Tweets not found");
+				System.out.println("");
+			}
+			
 		}
-		
+
+	}
+
+	public static void printTweets(List<Status> tweets) {
+		System.out.println("");
+		for (Status status : tweets) {
+			System.out.println("");
+			System.out.println("\t # user account: " + status.getUser().getName());
+			System.out.println("\t # Tweet: " + status.getText());
+			System.out.println("");
+		}
+		System.out.println("");
 	}
 
 }
