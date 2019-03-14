@@ -1,14 +1,30 @@
 package br.com.mashup.github.model;
 
-public class GitHubRepository {
+import java.util.List;
+
+import com.google.gson.Gson;
+
+import twitter4j.Status;
+
+public class ResponseItem {
 
 	private String name;
 	private String full_name;
 	private String html_url;
 	private String description;
 	
-	public GitHubRepository() {
+	private List<Status> tweets;
+	
+	public ResponseItem() {
 		
+	}
+
+	public ResponseItem(String name, String full_name, String html_url, String description, List<Status> tweets) {
+		this.name = name;
+		this.full_name = full_name;
+		this.html_url = html_url;
+		this.description = description;
+		this.tweets = tweets;
 	}
 
 	public String getName() {
@@ -43,11 +59,18 @@ public class GitHubRepository {
 		this.description = description;
 	}
 
+	public List<Status> getTweets() {
+		return tweets;
+	}
+
+	public void setTweets(List<Status> tweets) {
+		this.tweets = tweets;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((full_name == null) ? 0 : full_name.hashCode());
 		result = prime * result + ((html_url == null) ? 0 : html_url.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
@@ -62,12 +85,7 @@ public class GitHubRepository {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		GitHubRepository other = (GitHubRepository) obj;
-		if (description == null) {
-			if (other.description != null)
-				return false;
-		} else if (!description.equals(other.description))
-			return false;
+		ResponseItem other = (ResponseItem) obj;
 		if (full_name == null) {
 			if (other.full_name != null)
 				return false;
@@ -84,6 +102,11 @@ public class GitHubRepository {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return new Gson().toJson(this);
 	}
 	
 }

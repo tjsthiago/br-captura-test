@@ -9,7 +9,7 @@ import twitter4j.auth.AccessToken;
 @Component
 public class TwitterOauth {
 
-	public Twitter connect(TwitterOauthKeys twitterOauthKeys) {
+	public Twitter connect(TwitterOauthKeys twitterOauthKeys) throws Exception {
 
 		try {
 			

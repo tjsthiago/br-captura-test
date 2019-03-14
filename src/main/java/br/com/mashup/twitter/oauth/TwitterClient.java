@@ -21,9 +21,18 @@ public class TwitterClient {
 		
 		Query query = new Query(filter);
 		QueryResult result;
-		result = twitter.search(query);
+
+		try {
 		
-        return result.getTweets();
+			result = twitter.search(query);
+	        return result.getTweets();
+	        
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return null;
+		
 	}
 	
 }
